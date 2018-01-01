@@ -1,3 +1,5 @@
+import Rule from './rule'
+
 class Bumpover {
   constructor (rules = [], options = {}) {
     this.rules = rules
@@ -14,6 +16,9 @@ class Bumpover {
 
   bump = (node) => new Promise((resolve, reject) => {
     const rule = this.rules[0]
+    try { Rule(rule) } catch (e) {
+      reject(new Error(`Invalid rule:\n${e}`))
+    }
 
     rule.update(node).then(result => {
       const { node } = result

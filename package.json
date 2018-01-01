@@ -4,8 +4,9 @@
   "description": "🥊 Controllable way bumping data structure.",
   "main": "lib/index.js",
   "scripts": {
-    "build": "yarn run build:es",
+    "build": "yarn run build:es && yarn run build:cjs",
     "build:es": "rollup --config ./build/rollup.js",
+    "build:cjs": "rollup --config ./build/rollup-cjs.js",
     "clean": "rm -rf ./lib ./node_modules",
     "example:basic": "babel-node --presets env,stage-0 examples/basic/index.js",
     "lint": "standard",
@@ -42,6 +43,10 @@
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "standard": "^10.0.3"
+    "standard": "^10.0.3",
+    "superstruct": "^0.5.0"
+  },
+  "peerDependencies": {
+    "superstruct": "^0.5.0"
   }
 }
