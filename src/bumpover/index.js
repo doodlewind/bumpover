@@ -1,6 +1,6 @@
-import Rule from './rule'
+import { Rule } from '../rule'
 
-class Bumpover {
+export class Bumpover {
   constructor (rules = [], options = {}) {
     this.rules = rules
     this.options = {
@@ -55,5 +55,3 @@ class Bumpover {
     return true
   }
 }
-
-export default Bumpover

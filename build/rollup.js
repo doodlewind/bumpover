@@ -19,5 +19,5 @@ export default {
     }),
     node()
   ],
-  external: ['superstruct']
+  external: ['superstruct', 'xml-js']
 }

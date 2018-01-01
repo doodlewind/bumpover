@@ -1,4 +1,4 @@
-import Bumpover from '../../src'
+import { Bumpover } from '../../src'
 
 const rules = [
   {

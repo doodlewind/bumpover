@@ -1,4 +1,3 @@
-import Bumpover from './bumpover'
-
-export { XMLBumpover } from './xml-bumpover'
-export default Bumpover
+export { Bumpover } from './bumpover'
+export { JSONBumpover } from './bumpover/json'
+export { XMLBumpover } from './bumpover/xml'
