@@ -4,7 +4,10 @@
   "description": "🥊 Sane way bumping data structure.",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:es": "rollup --config ./build/rollup.js",
+    "lint": "standard",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "rollup --config ./build/rollup.js --watch"
   },
   "repository": {
     "type": "git",
@@ -27,12 +30,13 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-eslint": "^8.1.2",
+    "babel-eslint": "8.0.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
     "rollup": "^0.53.2",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "standard": "^10.0.3"
   }
 }

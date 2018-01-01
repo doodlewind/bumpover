@@ -1,0 +1,9 @@
+{
+  "presets": [
+    [
+      "env",
+      { "targets": { "chrome": 60 }, "modules": false }
+    ],
+    "stage-0"
+  ]
+}
