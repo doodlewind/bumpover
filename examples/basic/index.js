@@ -3,12 +3,12 @@ import Bumpover from '../../src'
 const rules = [
   {
     match: node => node.tag === 'div',
-    bump: node => new Promise((resolve, reject) => {
+    update: node => new Promise((resolve, reject) => {
       resolve({
         action: 'next',
         node: {
-          tag: 'span',
-          ...node
+          ...node,
+          tag: 'span'
         }
       })
     })

@@ -5,14 +5,24 @@ class Bumpover {
       defaultValue: null,
       keepUnknown: false,
       silent: false,
+      childrenKey: 'children',
       serializer: a => a,
       deserializer: a => a,
       ...options
     }
   }
 
-  bump = (input) => new Promise((resolve, reject) => {
-    resolve('TODO: rule runner')
+  bump = (node) => new Promise((resolve, reject) => {
+    const rule = this.rules[0]
+
+    rule.update(node).then(result => {
+      const { node } = result
+      const { childrenKey } = this.options
+      const bumpChildren = Promise.all(node[childrenKey].map(this.bump))
+      bumpChildren.then(results => {
+        resolve({ ...node, [childrenKey]: results })
+      })
+    })
   })
 
   assert = (input, expected) => {
