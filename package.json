@@ -10,11 +10,29 @@
     "type": "git",
     "url": "git+https://github.com/doodlewind/bumpover.git"
   },
-  "keywords": ["validation", "migration", "json", "xml"],
+  "keywords": [
+    "validation",
+    "migration",
+    "json",
+    "xml"
+  ],
   "author": "doodlewind",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/doodlewind/bumpover/issues"
   },
-  "homepage": "https://github.com/doodlewind/bumpover#readme"
+  "homepage": "https://github.com/doodlewind/bumpover#readme",
+  "standard": {
+    "parser": "babel-eslint"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "rollup": "^0.53.2",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-node-resolve": "^3.0.0"
+  }
 }
