@@ -12,6 +12,7 @@
     "example:xml": "babel-node --presets env,stage-0 examples/xml/index.js",
     "lint": "standard",
     "prepublish": "yarn run build",
+    "release": "np",
     "test": "yarn run example:basic",
     "watch": "rollup --config ./build/rollup.js --watch"
   },
@@ -40,6 +41,7 @@
     "babel-eslint": "8.0.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
+    "np": "^2.18.3",
     "rollup": "^0.53.2",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
