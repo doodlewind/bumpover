@@ -1,8 +1,8 @@
 {
   "name": "bumpover",
   "version": "0.0.1",
-  "description": "🥊 Sane way bumping data structure.",
-  "main": "src/index.js",
+  "description": "🥊 Controllable way bumping data structure.",
+  "main": "lib/index.js",
   "scripts": {
     "build:es": "rollup --config ./build/rollup.js",
     "lint": "standard",
