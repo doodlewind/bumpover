@@ -1,0 +1,13 @@
+
+language: node_js
+node_js:
+- stable
+
+env:
+  # TODO: Do two runs, one for testing and one for linting.
+  matrix:
+    - TEST_TYPE=lint
+
+script:
+  # Run testing or linting depending on the environment.
+  - npm run $TEST_TYPE
