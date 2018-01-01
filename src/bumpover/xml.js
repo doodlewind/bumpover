@@ -1,4 +1,4 @@
-import { Bumpover } from './bumpover'
+import { Bumpover } from './index'
 import convert from 'xml-js'
 
 export class XMLBumpover extends Bumpover {

@@ -1,4 +1,4 @@
-import { Bumpover } from './bumpover'
+import { Bumpover } from './index'
 
 export class JSONBumpover extends Bumpover {
   constructor (rules = [], options = []) {
