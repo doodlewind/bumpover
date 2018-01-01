@@ -14,7 +14,7 @@ class Bumpover {
     }
   }
 
-  bump = (node) => new Promise((resolve, reject) => {
+  bumpNode = (node) => new Promise((resolve, reject) => {
     const rule = this.rules[0]
     try { Rule(rule) } catch (e) {
       reject(new Error(`Invalid rule:\n${e}`))
@@ -23,10 +23,25 @@ class Bumpover {
     rule.update(node).then(result => {
       const { node } = result
       const { childrenKey } = this.options
-      const bumpChildren = Promise.all(node[childrenKey].map(this.bump))
+      if (!node[childrenKey]) return resolve({ ...node })
+
+      const bumpChildren = Promise.all(node[childrenKey].map(this.bumpNode))
       bumpChildren.then(results => {
         resolve({ ...node, [childrenKey]: results })
       })
+    })
+  })
+
+  bump = (str) => new Promise((resolve, reject) => {
+    // TODO: Update root node with rules.
+    const { childrenKey } = this.options
+    const rootNode = this.options.deserializer(str)
+    const bumpChildren = Promise.all(rootNode[childrenKey].map(this.bumpNode))
+    bumpChildren.then(results => {
+      const resultStr = this.options.serializer(
+        { ...rootNode, [childrenKey]: results }
+      )
+      resolve(resultStr)
     })
   })
 

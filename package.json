@@ -9,6 +9,7 @@
     "build:cjs": "rollup --config ./build/rollup-cjs.js",
     "clean": "rm -rf ./lib ./node_modules",
     "example:basic": "babel-node --presets env,stage-0 examples/basic/index.js",
+    "example:xml": "babel-node --presets env,stage-0 examples/xml/index.js",
     "lint": "standard",
     "prepublish": "yarn run build",
     "test": "yarn run example:basic",
@@ -44,7 +45,8 @@
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0",
     "standard": "^10.0.3",
-    "superstruct": "^0.5.0"
+    "superstruct": "^0.5.0",
+    "xml-js": "^1.6.1"
   },
   "peerDependencies": {
     "superstruct": "^0.5.0"
