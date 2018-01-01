@@ -1,0 +1,20 @@
+{
+  "name": "bumpover",
+  "version": "0.0.1",
+  "description": "🥊 Sane way bumping data structure.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doodlewind/bumpover.git"
+  },
+  "keywords": ["validation", "migration", "json", "xml"],
+  "author": "doodlewind",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/doodlewind/bumpover/issues"
+  },
+  "homepage": "https://github.com/doodlewind/bumpover#readme"
+}
