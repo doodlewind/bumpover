@@ -4,9 +4,13 @@
   "description": "🥊 Controllable way bumping data structure.",
   "main": "lib/index.js",
   "scripts": {
+    "build": "yarn run build:es",
     "build:es": "rollup --config ./build/rollup.js",
+    "clean": "rm -rf ./lib ./node_modules",
+    "example:basic": "babel-node --presets env,stage-0 examples/basic/index.js",
     "lint": "standard",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "yarn run build",
+    "test": "yarn run example:basic",
     "watch": "rollup --config ./build/rollup.js --watch"
   },
   "repository": {
@@ -29,6 +33,7 @@
     "parser": "babel-eslint"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "8.0.2",
     "babel-preset-env": "^1.6.1",
