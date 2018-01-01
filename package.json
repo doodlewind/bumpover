@@ -13,7 +13,7 @@
     "lint": "standard",
     "prepublish": "yarn run build",
     "release": "np",
-    "test": "yarn run example:basic",
+    "test": "echo \"TODO\"",
     "watch": "rollup --config ./build/rollup.js --watch"
   },
   "repository": {
