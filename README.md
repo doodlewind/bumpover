@@ -12,3 +12,8 @@
     <img src="https://img.shields.io/npm/l/bumpover.svg?maxAge=300">
   </a>
 </p>
+
+
+## License
+
+This package is [MIT-licensed](./LICENSE).
