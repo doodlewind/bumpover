@@ -1,5 +1,5 @@
 # bumpover
-🥊 Controllable way bumping data structure.
+🚧 Controllable toolkit bumping data structure.
 
 <p align="center">
   <a href="https://travis-ci.org/doodlewind/bumpover">

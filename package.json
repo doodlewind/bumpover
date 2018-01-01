@@ -1,7 +1,7 @@
 {
   "name": "bumpover",
   "version": "0.0.1",
-  "description": "🥊 Controllable way bumping data structure.",
+  "description": "🚧 Controllable toolkit bumping data structure.",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn run build:es && yarn run build:cjs",
