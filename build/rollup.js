@@ -30,5 +30,5 @@ export default {
     }),
     node()
   ],
-  external: ['superstruct', 'xml-js']
+  external: ['superstruct', 'xml-js', 'assert']
 }
