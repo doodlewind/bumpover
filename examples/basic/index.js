@@ -6,7 +6,7 @@ const rules = [
     match: node => node.tag === 'div',
     update: node => new Promise((resolve, reject) => {
       resolve({
-        action: 'next',
+        action: 'stop',
         node: {
           ...node,
           tag: 'span'
@@ -18,12 +18,16 @@ const rules = [
 
 const input = {
   tag: 'div',
-  children: []
+  children: [
+    { tag: 'div', children: [] }
+  ]
 }
 
 const expected = {
   tag: 'span',
-  children: []
+  children: [
+    { tag: 'div', children: [] }
+  ]
 }
 
 const bumper = new Bumpover(rules)

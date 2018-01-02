@@ -6,7 +6,7 @@ import { Options } from '../options'
 function sanitizeResults (results) {
   const sanitizedResults = results
     .map(result => Array.isArray(result) ? result : [result])
-    .reduce((a, b) => [...a, ...b])
+    .reduce((a, b) => [...a, ...b], [])
     .filter(result => !!result)
   return sanitizedResults
 }
@@ -14,15 +14,15 @@ function sanitizeResults (results) {
 // Result can be array, object or null. Unify its shape to result struct.
 function resolveResult (node, result, childrenKey) {
   if (!result) {
-    return { action: 'stop', node: null }
+    return { action: 'stop', newNode: null }
   } else if (Array.isArray(result)) {
     return {
       action: 'next',
-      node: { ...node, [childrenKey]: sanitizeResults(result) }
+      newNode: { ...node, [childrenKey]: sanitizeResults(result) }
     }
   } else {
     const { action, node } = result
-    return { action, node }
+    return { action, newNode: node }
   }
 }
 
@@ -61,9 +61,7 @@ function bumpRoot (node, options, bumpFn, resolve, reject) {
   const childPromises = node[childrenKey].map(bumpFn)
   const bumpChildren = Promise.all(childPromises)
   bumpChildren.then(results => {
-    const outputStr = serializer(
-      { ...node, [childrenKey]: results }
-    )
+    const outputStr = serializer({ ...node, [childrenKey]: results })
     resolve(outputStr)
   })
 }
@@ -100,8 +98,12 @@ export class Bumpover {
 
     rule.update(node).then(result => {
       const { childrenKey } = options
-      const newNode = resolveResult(node, result, childrenKey).node
-      bumpChildren(newNode, rules, options, bumpNode, resolve, reject)
+      const { action, newNode } = resolveResult(node, result, childrenKey)
+      if (action === 'next') {
+        bumpChildren(newNode, rules, options, bumpNode, resolve, reject)
+      } else if (action === 'stop') {
+        resolve({ action, node: newNode })
+      } else reject(new Error(`Unknown action:\n${action}`))
     })
   })
 
@@ -116,16 +118,20 @@ export class Bumpover {
     }
 
     // Update root node with rules.
-    const rootNode = this.options.deserializer(input)
-    const rule = getRule(rootNode, rules)
+    const root = this.options.deserializer(input)
+    const rule = getRule(root, rules)
     // Root node shouldn't be ignored.
     if (!rule) {
-      bumpRoot(rootNode, options, bumpNode, resolve, reject)
+      bumpRoot(root, options, bumpNode, resolve, reject)
     } else {
-      rule.update(rootNode).then(result => {
-        const { childrenKey } = options
-        const newNode = resolveResult(rootNode, result, childrenKey).node
-        bumpRoot(newNode, options, bumpNode, resolve, reject)
+      rule.update(root).then(result => {
+        const { childrenKey, serializer } = options
+        const { action, newNode } = resolveResult(root, result, childrenKey)
+        if (action === 'next') {
+          bumpRoot(newNode, options, bumpNode, resolve, reject)
+        } else if (action === 'stop') {
+          resolve(serializer(newNode))
+        } else reject(new Error(`Unknown action:\n${action}`))
       })
     }
   })
