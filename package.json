@@ -12,8 +12,7 @@
     "example:basic": "yarn run example examples/basic",
     "example:xml": "yarn run example examples/xml",
     "lint": "standard",
-    "prepublish": "yarn run build",
-    "release": "np",
+    "release": "yarn run build && np",
     "test": "yarn run example:basic && yarn run example:xml",
     "watch": "rollup --config ./build/rollup.js --watch"
   },
