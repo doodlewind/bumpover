@@ -1,3 +1,4 @@
+import { deepEqual } from 'assert'
 import { Rules, getRule } from '../rule'
 import { Options } from '../options'
 
@@ -79,7 +80,7 @@ export class Bumpover {
       ...options
     }
   }
-
+  // Bump node into result wrapped in promise.
   bumpNode = (node) => new Promise((resolve, reject) => {
     const { rules, options, bumpNode } = this
     const rule = getRule(node, rules)
@@ -107,6 +108,7 @@ export class Bumpover {
     })
   })
 
+  // Bump unserialized input into serizlized result wrapped in promise.
   bump = (input) => new Promise((resolve, reject) => {
     const { options, rules, bumpNode } = this
     // Validate rules and options for once.
@@ -136,13 +138,19 @@ export class Bumpover {
     }
   })
 
-  assert = (input, expected) => {
-    // WIP
-    return true
-  }
-
-  test = (input) => {
-    // WIP
-    return true
-  }
+  // Assert unserialized input can be bumped into expected format.
+  assert = (input, expected) => new Promise((resolve, reject) => {
+    this.bump(input).then(actual => {
+      try {
+        deepEqual(actual, expected)
+        resolve()
+      } catch (e) {
+        reject(e)
+      }
+    }).catch(reject)
+  })
+  // Test if unserialized input can bumped without exception.
+  test = (input) => new Promise((resolve, reject) => {
+    this.bump(input).then(resolve).catch(reject)
+  })
 }
