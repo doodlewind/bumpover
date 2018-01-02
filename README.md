@@ -9,8 +9,9 @@
 <br/>
 
 <p align="center">
-  <a href="#why">Why?</a> •
   <a href="#features">Features</a> •
+  <a href="#why">Why</a> •
+  <a href="#usage">Usage</a> •
   <a href="#examples">Examples</a> •
   <a href="#documentation">Documentation</a>
 </p>
@@ -27,26 +28,114 @@
   </a>
 </p>
 
-Bumpover helps you writing data validation and migration script in a controllable and reliable way, which can be tedious and leaky with your bare arms.
+Bumpover helps you writing data validation & migration script in a controllable and reliable way, which can be tedious and leaky with your bare arms.
 
 By utilizing type annotation powered by [superstruct](https://github.com/ianstormtaylor/superstruct), it's super straightforward to define your own complex data types, leaving bumpover deal with your data at runtime. Besides XML and JSON support out of the box, you can even customize bumpover with your own parser, bumping any data format interchangeable with JSON.
 
 
-## Why?
-TODO
-
-
 ## Features
-TODO
+
+* Declarative XML/JSON data validating and upgrading.
+* Friendly type annotaton with recursive data shape support.
+* Promise-based async node upgrading, handy for external or linked data shape. e.g., grab image by link defined in XML node, upload it to your cloud storage, then update new node's `src` on response ends.
+* Configurable traversing mechanism, e.g., whether returning beforehand or filtering out unknown nodes.
+* Pluggable serializer and deserializer, supporting new data format in merely tens of lines.
+
+
+## Why
+
+Stable data structure is essential for a rubust app, while during continual iteration, data structure **always** changes frequently. One common approach for compatibility is introducing more COMPAT code in business logic, which works but quickly stales codebase, sometimes with incompatible versions of data this is even not possible (Think about `.doc` and `.docx`). So here comes the necessity of data migration.
+
+With modern web, it's trivial to ensure latest version of app code deployed on client. While for user data stored in DB, the difficulty upgrading them with script is pretty underestimated. Especially for data serialized and stored as string, parsing and migrating them can be formidable. Writing script tranforming `'<p>123</p>'` to `{ paragragh: 123 }` is one thing, ensuring validity for gigabytes of data is another - And this is what bumpover is designed to handle.
+
+Another scenerio utilizing bumpover is sanitizing. Say you're working with a rich content editor whose data model supports nesting, it's essential to ensure valid data structure after each user input event, e.g., pasting and dragging. Generally you'll want to write declarative rules normalizing data, and this is also what bumpover offers.
+
+For cases mentioned above, there are existing **runtime** data validation tools that helps, while they're not really popularized when compared with **compile time** type analysis tools, e.g., [TypeScript](https://www.typescriptlang.org/docs/handbook/basic-types.html) and [Flow](https://flow.org/en/docs/types/). Runtime data validation tools generally offers heavier API without much customizability, making them less friendly to work with. As an alternative, [superstruct](https://github.com/ianstormtaylor/superstruct) provides precise runtime data validation with a grammar closer to pure type annotations, making it powerful to express complex data types. Since bumpover relies deeply on it, it takes the advantage of superstruct to express your custom types and rules.
+
+
+## Usage
+
+> Before getting started, remember to install depencies:
+
+```
+npm install bumpover superstruct
+```
+
+Let's start with simple data validation with superstruct. Say we want to define `Article` with `Tag` as props:
+
+``` js
+import { struct } from 'superstruct'
+
+const Tag = struct({
+  name: 'string',
+  note: 'string|number'
+})
+
+const Article = struct({
+  id: 'number',
+  title: 'string',
+  tags: [Tag]
+})
+
+const data = {
+  id: 34,
+  title: 'Hello World',
+  tags: [
+    { name: 'news', note: 'foo' },
+    { name: 'features', note: 123 }
+  ]
+}
+
+// Throw when the data is invalid, return it otherwise.
+const article = Article(data)
+```
+
+Easily can we validate nested data structure. Now what if we want to migrate from `Tag.note` field to `Tag.comment`?
+
+``` js
+import { Bumpover } from '../../src'
+
+const rules = [
+  {
+    match: node => 'note' in node,
+    update: ({ name, note }) => new Promise((resolve, reject) => {
+      resolve({
+        action: 'next',
+        node: { name, comment: note }
+      })
+    })
+  }
+]
+
+const bumper = new Bumpover(rules, { childrenKey: 'tags' })
+bumper.bump(rules).then(console.log)
+```
+
+Simply providing rules converting nodes, then bumpover will walk and transform data for you. Several points:
+
+* Rules are the single source of truth implementing your transform logic.
+* Use `rule.match` to match the node you'd like to transform.
+* Use `rule.update` to update node inside promise, which allows async updating. 
+* Wrap new node inside `node` field, with extra `action` field to specify whether walking throught its children. If you want to stop traversing here, simply return `'stop'` instead of `'next'`.
+
+That's the very basics of bumpover. Bumping XML and JSON string data is also shipped **out of the box** with the `XMLBumpover` and `JSONBumpover` subclasses. Give it a try whenever needed!
 
 
 ## Examples
-TODO
+
+See [examples](./examples) for more working examples.
 
 
 ## Documentation
+
 Check out API [reference](./docs/reference.md) for more details.
 
 
+## Contribution
+
+Issues and pull requests are welcomed! This project is still in its very early age, all kinds of help is precious and appreciated.
+
+
 ## License
+
 This package is [MIT-licensed](./LICENSE).
