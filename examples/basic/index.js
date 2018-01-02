@@ -1,5 +1,11 @@
+import { struct } from 'superstruct'
 import { Bumpover } from '../../src'
 import { match, trace } from '../utils'
+
+const Node = struct({
+  tag: struct.enum(['span', 'div']),
+  children: 'array'
+})
 
 const rules = [
   {
@@ -7,12 +13,10 @@ const rules = [
     update: node => new Promise((resolve, reject) => {
       resolve({
         action: 'stop',
-        node: {
-          ...node,
-          tag: 'span'
-        }
+        node: { ...node, tag: 'span' }
       })
-    })
+    }),
+    struct: Node
   }
 ]
 
