@@ -50,7 +50,7 @@ function bumpChildren (node, rules, options, bumpFn, resolve, reject) {
   const bumpAll = Promise.all(childPromises)
   bumpAll.then(results => {
     resolve({ ...node, [childrenKey]: sanitizeResults(results) })
-  })
+  }).catch(reject)
 }
 
 function bumpIgnoredNode (node, rule, options, bumpFn, resolve, reject) {
@@ -65,17 +65,17 @@ function bumpIgnoredNode (node, rule, options, bumpFn, resolve, reject) {
   const bumpAll = Promise.all(childPromises)
   bumpAll.then(results => {
     resolve(sanitizeResults(results))
-  })
+  }).catch(reject)
 }
 
 function bumpRoot (node, options, bumpFn, resolve, reject) {
-  const { childrenKey, serializer } = options
+  const { childrenKey, serializer, defaultValue } = options
   const childPromises = node[childrenKey].map(bumpFn)
   const bumpChildren = Promise.all(childPromises)
   bumpChildren.then(results => {
-    const outputStr = serializer({ ...node, [childrenKey]: results })
-    resolve(outputStr)
-  })
+    const output = serializer({ ...node, [childrenKey]: results })
+    resolve(output || defaultValue)
+  }).catch(reject)
 }
 
 export class Bumpover {
@@ -84,7 +84,6 @@ export class Bumpover {
     this.options = {
       defaultValue: null,
       ignoreUnknown: false,
-      silent: false,
       childrenKey: 'children',
       serializer: a => a,
       deserializer: a => a,
@@ -119,7 +118,7 @@ export class Bumpover {
       } else if (action === 'stop') {
         resolve({ action, node: newNode })
       } else reject(new Error(`Unknown action:\n${action}`))
-    })
+    }).catch(reject)
   })
 
   // Bump unserialized input into serizlized result wrapped in promise.
@@ -141,16 +140,16 @@ export class Bumpover {
       bumpRoot(rootNode, options, bumpNode, resolve, reject)
     } else {
       rule.update(rootNode).then(result => {
-        const { childrenKey, serializer } = options
+        const { childrenKey, serializer, defaultValue } = options
         const { action, newNode } = resolveResult(
           rootNode, result, rule.struct, childrenKey
         )
         if (action === 'next') {
           bumpRoot(newNode, options, bumpNode, resolve, reject)
         } else if (action === 'stop') {
-          resolve(serializer(newNode))
+          resolve(serializer(newNode) || defaultValue)
         } else reject(new Error(`Unknown action:\n${action}`))
-      })
+      }).catch(reject)
     }
   })
 
