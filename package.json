@@ -14,7 +14,7 @@
     "lint": "standard",
     "prepublish": "yarn run build",
     "release": "np",
-    "test": "echo \"TODO\"",
+    "test": "yarn run example:basic && yarn run example:xml",
     "watch": "rollup --config ./build/rollup.js --watch"
   },
   "repository": {

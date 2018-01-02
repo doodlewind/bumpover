@@ -6,6 +6,12 @@ export const Rule = struct({
   struct: 'object?'
 })
 
-export function getRule (node, rules) {
+export const Rules = struct([Rule])
 
+export function getRule (node, rules) {
+  for (let i = 0; i < rules.length; i++) {
+    const rule = rules[i]
+    if (rule.match(node)) return rule
+  }
+  return null
 }

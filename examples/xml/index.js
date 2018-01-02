@@ -1,8 +1,9 @@
 import { XMLBumpover } from '../../src'
+import { match, trace, trim } from '../utils'
 
 const rules = [
   {
-    match: node => node.tag === 'div',
+    match: node => node.name === 'div',
     update: node => new Promise((resolve, reject) => {
       resolve({
         action: 'next',
@@ -15,11 +16,17 @@ const rules = [
   }
 ]
 
-const input = `
+const input = trim(`
 <div>
   <div>demo</div>
 </div>
-`
+`)
+
+const expected = trim(`
+<span>
+  <span>demo</span>
+</span>
+`)
 
 const bumper = new XMLBumpover(rules)
-bumper.bump(input).then(console.log)
+bumper.bump(input).then(match(expected)).catch(trace)

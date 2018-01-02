@@ -1,4 +1,5 @@
 import { Bumpover } from '../../src'
+import { match, trace } from '../utils'
 
 const rules = [
   {
@@ -20,5 +21,10 @@ const input = {
   children: []
 }
 
+const expected = {
+  tag: 'span',
+  children: []
+}
+
 const bumper = new Bumpover(rules)
-bumper.bump(input).then(console.log)
+bumper.bump(input).then(match(expected)).catch(trace)
