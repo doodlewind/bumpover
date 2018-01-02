@@ -93,7 +93,7 @@ const article = Article(data)
 Easily can we validate nested data structure. Now what if we want to migrate from `Tag.note` field to `Tag.comment`?
 
 ``` js
-import { Bumpover } from '../../src'
+import { Bumpover } from 'bumpover'
 
 const rules = [
   {
