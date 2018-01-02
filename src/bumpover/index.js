@@ -12,17 +12,28 @@ function sanitizeResults (results) {
   return sanitizedResults
 }
 
+// Validate node with possible struct provided in rules.
+function validateNode (node, struct) {
+  if (!struct) return
+  try { struct(node) } catch (e) {
+    const nodeStr = JSON.stringify(node, null, 2)
+    throw new Error(`Invalid node:\n${e}\nNode:\n${nodeStr}`)
+  }
+}
+
 // Result can be array, object or null. Unify its shape to result struct.
-function resolveResult (node, result, childrenKey) {
+function resolveResult (node, result, struct, childrenKey) {
   if (!result) {
     return { action: 'stop', newNode: null }
   } else if (Array.isArray(result)) {
+    validateNode(node, struct)
     return {
       action: 'next',
       newNode: { ...node, [childrenKey]: sanitizeResults(result) }
     }
   } else {
     const { action, node } = result
+    validateNode(node, struct)
     return { action, newNode: node }
   }
 }
@@ -80,6 +91,7 @@ export class Bumpover {
       ...options
     }
   }
+
   // Bump node into result wrapped in promise.
   bumpNode = (node) => new Promise((resolve, reject) => {
     const { rules, options, bumpNode } = this
@@ -99,7 +111,9 @@ export class Bumpover {
 
     rule.update(node).then(result => {
       const { childrenKey } = options
-      const { action, newNode } = resolveResult(node, result, childrenKey)
+      const { action, newNode } = resolveResult(
+        node, result, rule.struct, childrenKey
+      )
       if (action === 'next') {
         bumpChildren(newNode, rules, options, bumpNode, resolve, reject)
       } else if (action === 'stop') {
@@ -120,15 +134,17 @@ export class Bumpover {
     }
 
     // Update root node with rules.
-    const root = this.options.deserializer(input)
-    const rule = getRule(root, rules)
+    const rootNode = this.options.deserializer(input)
+    const rule = getRule(rootNode, rules)
     // Root node shouldn't be ignored.
     if (!rule) {
-      bumpRoot(root, options, bumpNode, resolve, reject)
+      bumpRoot(rootNode, options, bumpNode, resolve, reject)
     } else {
-      rule.update(root).then(result => {
+      rule.update(rootNode).then(result => {
         const { childrenKey, serializer } = options
-        const { action, newNode } = resolveResult(root, result, childrenKey)
+        const { action, newNode } = resolveResult(
+          rootNode, result, rule.struct, childrenKey
+        )
         if (action === 'next') {
           bumpRoot(newNode, options, bumpNode, resolve, reject)
         } else if (action === 'stop') {
@@ -149,6 +165,7 @@ export class Bumpover {
       }
     }).catch(reject)
   })
+
   // Test if unserialized input can bumped without exception.
   test = (input) => new Promise((resolve, reject) => {
     this.bump(input).then(resolve).catch(reject)
