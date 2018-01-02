@@ -1,11 +1,12 @@
 import { Rule } from '../rule'
+import { Options } from '../options'
 
 export class Bumpover {
   constructor (rules = [], options = {}) {
     this.rules = rules
     this.options = {
       defaultValue: null,
-      keepUnknown: false,
+      ignoreUnknown: false,
       silent: false,
       childrenKey: 'children',
       serializer: a => a,
@@ -25,7 +26,8 @@ export class Bumpover {
       const { childrenKey } = this.options
       if (!node[childrenKey]) return resolve({ ...node })
 
-      const bumpChildren = Promise.all(node[childrenKey].map(this.bumpNode))
+      const childPromises = node[childrenKey].map(this.bumpNode)
+      const bumpChildren = Promise.all(childPromises)
       bumpChildren.then(results => {
         resolve({ ...node, [childrenKey]: results })
       })
@@ -33,10 +35,21 @@ export class Bumpover {
   })
 
   bump = (str) => new Promise((resolve, reject) => {
+    // Validate rules and options for once.
+    this.rules.forEach(rule => {
+      try { Rule(rule) } catch (e) {
+        throw new Error(`Invalid rule:\n${e}`)
+      }
+    })
+    try { Options(this.options) } catch (e) {
+      throw new Error(`Invalid options:\n${e}`)
+    }
+
     // TODO: Update root node with rules.
     const { childrenKey } = this.options
     const rootNode = this.options.deserializer(str)
-    const bumpChildren = Promise.all(rootNode[childrenKey].map(this.bumpNode))
+    const childPromises = rootNode[childrenKey].map(this.bumpNode)
+    const bumpChildren = Promise.all(childPromises)
     bumpChildren.then(results => {
       const resultStr = this.options.serializer(
         { ...rootNode, [childrenKey]: results }

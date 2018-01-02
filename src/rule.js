@@ -5,3 +5,7 @@ export const Rule = struct({
   update: 'function',
   struct: 'object?'
 })
+
+export function getRule (node, rules) {
+
+}

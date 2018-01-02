@@ -11,7 +11,18 @@ export default {
   },
   plugins: [
     babel({
+      // Default `.babelrc` is used for babel-node running test cases.
+      // Use external-helpers specifically for rollup.
+      babelrc: false,
       exclude: 'node_modules/**',
+      presets: [
+        [
+          'env',
+          { 'targets': { 'chrome': 60 }, 'modules': false }
+        ],
+        'stage-0'
+      ],
+      plugins: ['external-helpers'],
       sourceMap: true
     }),
     cjs({
