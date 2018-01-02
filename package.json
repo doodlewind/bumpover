@@ -13,7 +13,7 @@
     "example:xml": "yarn run example examples/xml",
     "lint": "standard",
     "release": "yarn run build && np",
-    "test": "yarn run example:basic && yarn run example:xml",
+    "test": "npm run example:basic && npm run example:xml",
     "watch": "rollup --config ./build/rollup.js --watch"
   },
   "repository": {
