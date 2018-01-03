@@ -123,6 +123,16 @@ That's the very basics of bumpover. Bumping XML and JSON string data is also shi
 
 ## Examples
 
+More examples can be found in the [walkthough](./docs/walkthrough.md) guide.
+
+- [Bumping With Struct Validation](./docs/walkthrough.md#bumping-with-struct-validation)
+- [Bumping XML String](./docs/walkthrough.md#bumping-xml-string)
+- [Bumping Custom Data Format](./docs/walkthrough.md#bumping-custom-data-format)
+- [Async Data Bumping](./docs/walkthrough.md#async-data-bumping)
+- [Return Beforehand](./docs/walkthrough.md#return-beforehand)
+- [Keep or Discard Unknown Nodes](./docs/walkthrough.md#keep-or-discard-unknown-nodes)
+
+
 See [examples](./examples) for more working examples.
 
 
