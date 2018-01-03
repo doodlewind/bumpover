@@ -12,8 +12,8 @@
     "example:basic": "yarn run example examples/basic",
     "example:xml": "yarn run example examples/xml",
     "lint": "standard",
-    "release": "yarn run build && np",
-    "test": "npm run example:basic && npm run example:xml",
+    "release": "np",
+    "test": "ava",
     "watch": "rollup --config ./build/rollup.js --watch"
   },
   "repository": {
@@ -35,7 +35,13 @@
   "standard": {
     "parser": "babel-eslint"
   },
+  "ava": {
+    "files": [
+      "test/**/*.js"
+    ]
+  },
   "devDependencies": {
+    "ava": "^0.24.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "8.0.2",
