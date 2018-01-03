@@ -32,7 +32,8 @@ function resolveResult (node, result, struct, childrenKey) {
       newNode: { ...node, [childrenKey]: sanitizeResults(result) }
     }
   } else {
-    const { action, node } = result
+    // Provide default action.
+    const { action = 'next', node } = result
     validateNode(node, struct)
     return { action, newNode: node }
   }

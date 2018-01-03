@@ -12,7 +12,6 @@ const rules = [
     match: node => node.tag === 'div',
     update: node => new Promise((resolve, reject) => {
       resolve({
-        action: 'stop',
         node: { ...node, tag: 'span' }
       })
     }),
@@ -30,7 +29,7 @@ const input = {
 const expected = {
   tag: 'span',
   children: [
-    { tag: 'div', children: [] }
+    { tag: 'span', children: [] }
   ]
 }
 

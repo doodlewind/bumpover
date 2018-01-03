@@ -111,7 +111,6 @@ const rules = [
     match: node => node.name === 'div',
     update: node => new Promise((resolve, reject) => {
       resolve({
-        action: 'next',
         node: { ...node, name: 'span' }
       })
     })
@@ -129,7 +128,7 @@ Simply providing rules converting nodes, then bumpover will walk and transform d
 * Rules are the single source of truth implementing your transform logic.
 * Use `rule.match` to match the node you'd like to transform.
 * Use `rule.update` to update node inside promise, which allows async updating.
-* Wrap new node inside `node` field, with extra action field to specify whether walking through its children. If you want to stop traversing here, simply return `'stop'` instead of `'next'`.
+* Wrap new node inside `node` field to be resoveld.
 
 
 ## Examples
