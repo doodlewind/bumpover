@@ -74,7 +74,7 @@ import { struct } from 'superstruct'
 With superstruct you can define your own data schema. Say you'd like to verify a node in virtual DOM tree with such shape:
 
 ``` js
-const data = {
+const maybeNode = {
   name: 'div',
   props: { background: 'red' },
   children: []
@@ -96,12 +96,12 @@ const Node = struct({
 Now we can use `Node` struct to validate data. You can simply call it as a function:
 
 ``` js
-Node(data)
+Node(maybeNode)
 ```
 
 Detailed error will be thrown if data doesn't conform to the `Node` shape, or return the validated data when validation succeeds.
 
-Now suppose we'd like to transform the virtual DOM data above by replacing all `div` tags with `span` tags, keeping all other nodes intact. How do we handle this with reliability? You can traversing data yourself, or, simply defining `rules`:
+Now suppose we'd like to transform the virtual DOM data above by replacing all `div` tags with `span` tags, keeping all other nodes intact. How do we handle this with reliability? You can manually traverse data, or, simply define `rules`:
 
 ``` js
 import { Bumpover } from 'bumpover'
@@ -154,7 +154,7 @@ Check out [API reference](./docs/reference.md) for more details.
 
 ## Contribution
 
-Issues and pull requests are welcomed! This project is still in its very early age, all kinds of help is precious and appreciated.
+Issues and pull requests are welcomed! This project is still in its very early age, all kinds of help are precious and appreciated.
 
 
 ## License

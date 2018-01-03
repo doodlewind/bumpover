@@ -34,7 +34,7 @@ import { struct } from 'superstruct'
 With superstruct you can define your own data schema. Say you'd like to verify a node in virtual DOM tree with such shape:
 
 ``` js
-const data = {
+const maybeNode = {
   name: 'div',
   props: { background: 'red' },
   children: []
@@ -56,7 +56,7 @@ const Node = struct({
 Now we can use `Node` struct to validate data. You can simply call it as a function:
 
 ``` js
-Node(data)
+Node(maybeNode)
 ```
 
 Detailed error will be thrown if data doesn't conform to the `Node` shape, or return the validated data when validation succeeds.
@@ -146,7 +146,7 @@ Then import `XMLBumpover`, which extends `Bumpover` under the hood.
 import { XMLBumpover } from 'bumpover'
 ```
 
-Now what if we'd still want to transform all `<div>` tags with `<span>`? Providing same rules is enough:
+Now what if we'd still like to transform all `<div>` tags with `<span>`? Providing same rules is enough:
 
 ``` js
 const rules = [
@@ -245,7 +245,7 @@ By default bumpover walks through the entire node tree. While for some scenarios
 </video>
 ```
 
-The `<video>` tag is filled with unfamiliar content. During data migration, you may simply want to keep these content intact without writing too many boilerplate rules. Since these tags are contained by `<video>`, so one solution is to **keep `<video>`'s content with original shape**. We have `rule.action` for this case:
+The `<video>` tag is filled with unfamiliar content. During data migration, you may simply want to keep these content intact without writing too many boilerplate rules. Since these tags are contained by `<video>`, so one solution is to **keep `<video>`'s content with original shape**. We have `action` field for this case:
 
 ``` js
 const rules = [
@@ -258,15 +258,15 @@ const rules = [
 ]
 ```
 
-Still can we transform the attributes of the outmost video tag, while since the `'stop'` action is provided, its content remains it shape.
+Still can we transform the attributes of the outmost video tag, while since the `'stop'` action is provided, the content remains its shape.
 
 
 ## Keep or Discard Unknown Nodes
 
 Another flexibility that bumpover provides is the `ignoreUnknown` option. Imagine two different scenarios migrating data:
 
-1. For **incompatible** data migration, we only allows known nodes bumped into new version via rules.
-2. For **compatible** data migration, most nodes can be kept, we only updates certain nodes.
+1. For **incompatible** data migration, we only allow known nodes bumped into new version via rules.
+2. For **compatible** data migration, most nodes can be kept, we only update certain nodes.
 
 Case 1 happens when you paste content into rich text editor. Say you're pasting such content into an rich text editor that does not support editing images or quotes:
 
@@ -305,4 +305,4 @@ To handle both scenarios, you can provide an `ignoreUnknown` option to bumpover,
 const bumper = new Bumpover(rules, { ignoreUnknown: true })
 ```
 
-For more options, please checkout [API reference](./reference.md).
+For more information, please checkout [API reference](./reference.md).
