@@ -58,72 +58,80 @@ For cases mentioned above, there are existing **runtime** data validation tools 
 > Before getting started, remember to install dependencies:
 
 ```
-npm install bumpover superstruct
+npm install --save bumpover superstruct
 ```
 
-Let's start with simple data validation with superstruct. Say we want to define `Article` with `Tag` as props:
+Then you can import them into your code base:
+
+``` js
+import { Bumpover } from 'bumpover'
+import { struct } from 'superstruct'
+```
+
+With superstruct you can define your own data schema. Say you'd like to verify a node in virtual DOM tree with such shape:
+
+``` js
+const data = {
+  name: 'div',
+  props: { background: 'red' },
+  children: []
+}
+```
+
+We can define a struct validating this structure:
 
 ``` js
 import { struct } from 'superstruct'
 
-const Tag = struct({
+const Node = struct({
   name: 'string',
-  note: 'string|number'
+  props: 'object?',
+  children: 'array'
 })
-
-const Article = struct({
-  id: 'number',
-  title: 'string',
-  tags: [Tag]
-})
-
-const data = {
-  id: 34,
-  title: 'Hello World',
-  tags: [
-    { name: 'news', note: 'foo' },
-    { name: 'features', note: 123 }
-  ]
-}
-
-// Throw when the data is invalid, return it otherwise.
-const article = Article(data)
 ```
 
-Easily can we validate nested data structure. Now what if we want to migrate from `Tag.note` field to `Tag.comment`?
+Now we can use `Node` struct to validate data. You can simply call it as a function:
+
+``` js
+Node(data)
+```
+
+Detailed error will be thrown if data doesn't conform to the `Node` shape, or return the validated data when validation succeeds.
+
+Now suppose we'd like to transform the virtual DOM data above by replacing all `div` tags with `span` tags, keeping all other nodes intact. How do we handle this with reliability? You can traversing data yourself, or, simply defining `rules`:
 
 ``` js
 import { Bumpover } from 'bumpover'
 
 const rules = [
   {
-    match: node => 'note' in node,
-    update: ({ name, note }) => new Promise((resolve, reject) => {
+    match: node => node.name === 'div',
+    update: node => new Promise((resolve, reject) => {
       resolve({
         action: 'next',
-        node: { name, comment: note }
+        node: { ...node, name: 'span' }
       })
     })
   }
 ]
 
-const bumper = new Bumpover(rules, { childrenKey: 'tags' })
-bumper.bump(rules).then(console.log)
+const bumper = new Bumpover(rules)
+bumper.bump(data).then(console.log)
+
+// Receive new node data.
 ```
 
 Simply providing rules converting nodes, then bumpover will walk and transform data for you. Several points:
 
 * Rules are the single source of truth implementing your transform logic.
 * Use `rule.match` to match the node you'd like to transform.
-* Use `rule.update` to update node inside promise, which allows async updating. 
-* Wrap new node inside `node` field, with extra `action` field to specify whether walking through its children. If you want to stop traversing here, simply return `'stop'` instead of `'next'`.
-
-That's the very basics of bumpover. Bumping XML and JSON string data is also shipped **out of the box** with the `XMLBumpover` and `JSONBumpover` subclasses. Give it a try whenever needed!
+* Use `rule.update` to update node inside promise, which allows async updating.
+* Wrap new node inside `node` field, with extra action field to specify whether walking through its children. If you want to stop traversing here, simply return `'stop'` instead of `'next'`.
 
 
 ## Examples
 
-More examples can be found in the [walkthough](./docs/walkthrough.md) guide.
+More examples can be found in the [walkthrough](./docs/walkthrough.md) guide.
 
 - [Bumping With Struct Validation](./docs/walkthrough.md#bumping-with-struct-validation)
 - [Bumping XML String](./docs/walkthrough.md#bumping-xml-string)
@@ -133,12 +141,12 @@ More examples can be found in the [walkthough](./docs/walkthrough.md) guide.
 - [Keep or Discard Unknown Nodes](./docs/walkthrough.md#keep-or-discard-unknown-nodes)
 
 
-See [examples](./examples) for more working examples.
+See [examples](./examples) for more working examples (WIP).
 
 
 ## Documentation
 
-Check out API [reference](./docs/reference.md) for more details.
+Check out [API reference](./docs/reference.md) for more details.
 
 
 ## Contribution

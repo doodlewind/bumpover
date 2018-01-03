@@ -4,7 +4,7 @@ Here are some snippets utilizing bumpover to validate and convert data.
 
 - [Installing Bumpover](#installing-bumpover)
 - [Validating Plain Object](#validating-plain-object)
-- [Bumping plain object](#bumping-plain-object)
+- [Bumping Plain Object](#bumping-plain-object)
 - [Bumping With Struct Validation](#bumping-with-struct-validation)
 - [Bumping XML String](#bumping-xml-string)
 - [Bumping Custom Data Format](#bumping-custom-data-format)
@@ -64,7 +64,7 @@ Detailed error will be thrown if data doesn't conform to the `Node` shape, or re
 This has few to do with bumpover itself, while this approach is widely used in following examples. For more information, checkout [superstruct docs](https://github.com/ianstormtaylor/superstruct/blob/master/docs/guide.md).
 
 
-## Bumping plain object
+## Bumping Plain Object
 
 Say we'd like to transform the virtual DOM data above by replacing all `div` tags with `span` tags, keeping all other nodes intact. How do we handle it with reliability? You can traversing data yourself, or, simply defining `rules`:
 
