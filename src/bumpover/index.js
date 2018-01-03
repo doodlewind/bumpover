@@ -70,6 +70,10 @@ function bumpIgnoredNode (node, rule, options, bumpFn, resolve, reject) {
 }
 
 function bumpRoot (node, options, bumpFn, resolve, reject) {
+  if (!node) {
+    resolve(options.defaultValue)
+    return
+  }
   const { childrenKey, serializer, defaultValue } = options
   const childPromises = node[childrenKey].map(bumpFn)
   const bumpChildren = Promise.all(childPromises)
@@ -94,6 +98,10 @@ export class Bumpover {
 
   // Bump node into result wrapped in promise.
   bumpNode = (node) => new Promise((resolve, reject) => {
+    if (!node) {
+      resolve({ action: 'stop', node: null })
+      return
+    }
     const { rules, options, bumpNode } = this
     const rule = getRule(node, rules)
     // Keep or discard unknown node according to `ignoreUnknown` option.
@@ -135,6 +143,11 @@ export class Bumpover {
 
     // Update root node with rules.
     const rootNode = this.options.deserializer(input)
+    if (!rootNode) {
+      resolve(options.defaultValue)
+      return
+    }
+
     const rule = getRule(rootNode, rules)
     // Root node shouldn't be ignored.
     if (!rule) {

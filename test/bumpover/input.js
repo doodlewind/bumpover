@@ -22,7 +22,11 @@ test('empty node', t => {
     .then(actual => t.deepEqual(actual, expected))
 })
 
-test('undefined node', async t => {
+test('undefined node', t => {
+  let input
+
+  const expected = null
+
   const rules = [
     {
       match: (node) => false,
@@ -34,5 +38,7 @@ test('undefined node', async t => {
 
   const bumper = new Bumpover(rules)
 
-  await t.throws(bumper.bump())
+  return bumper
+    .bump(input)
+    .then(actual => t.deepEqual(actual, expected))
 })
