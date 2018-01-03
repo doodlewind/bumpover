@@ -14,7 +14,7 @@
     "lint": "standard",
     "release": "np",
     "test": "ava",
-    "watch": "rollup --config ./build/rollup.js --watch"
+    "watch": "rollup --config ./build/rollup-cjs.js --watch"
   },
   "repository": {
     "type": "git",
