@@ -76,7 +76,6 @@ const rules = [
     match: node => node.name === 'div',
     update: node => new Promise((resolve, reject) => {
       resolve({
-        action: 'next',
         node: { ...node, name: 'span' }
       })
     })
@@ -94,7 +93,7 @@ Simply providing rules converting nodes, then bumpover will walk and transform d
 * Rules are the single source of truth implementing your transform logic.
 * Use `rule.match` to match the node you'd like to transform.
 * Use `rule.update` to update node inside promise, which allows async updating.
-* Wrap new node inside `node` field, with extra action field to specify whether walking through its children. If you want to stop traversing here, simply return `'stop'` instead of `'next'`.
+* Wrap new node inside `node` field to be resoveld.
 
 
 ## Bumping With Struct Validation
@@ -118,7 +117,6 @@ const rules = [
     update: node => new Promise((resolve, reject) => {
       const { name, props, children } = node
       resolve({
-        action: 'next',
         node: { tag: name, props, children }
       })
     })
@@ -154,11 +152,7 @@ const rules = [
     match: node => node.name === 'div',
     update: node => new Promise((resolve, reject) => {
       resolve({
-        action: 'next',
-        node: {
-          ...node,
-          name: 'span'
-        }
+        node: { ...node, name: 'span' }
       })
     })
   }
@@ -216,7 +210,6 @@ async function imageOps (node, resolve) {
   const image = await fetch(node.src)
   const newSrc = await uploadImage(image)
   resolve({
-    action: 'next',
     node: { ...node, src: newSrc }
   })
 }
@@ -245,7 +238,7 @@ By default bumpover walks through the entire node tree. While for some scenarios
 </video>
 ```
 
-The `<video>` tag is filled with unfamiliar content. During data migration, you may simply want to keep these content intact without writing too many boilerplate rules. Since these tags are contained by `<video>`, so one solution is to **keep `<video>`'s content with original shape**. We have `action` field for this case:
+The `<video>` tag is filled with unfamiliar content. During data migration, you may simply want to keep these content intact without writing too many boilerplate rules. Since these tags are contained by `<video>`, so one solution is to **keep `<video>`'s content with original shape**. We have `action` field resolved together with `node` for this case:
 
 ``` js
 const rules = [
