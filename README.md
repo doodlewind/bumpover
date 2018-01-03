@@ -26,6 +26,9 @@
   <a href="./LICENSE">
     <img src="https://img.shields.io/npm/l/bumpover.svg?maxAge=300">
   </a>
+  <a href="https://standardjs.com">
+    <img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg">
+  </a>
 </p>
 
 Bumpover helps you writing data validation & migration script in a controllable and reliable way, which can be tedious and leaky with your bare arms.
