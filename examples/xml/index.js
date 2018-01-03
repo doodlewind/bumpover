@@ -6,11 +6,7 @@ const rules = [
     match: node => node.name === 'div',
     update: node => new Promise((resolve, reject) => {
       resolve({
-        action: 'next',
-        node: {
-          ...node,
-          name: 'span'
-        }
+        node: { ...node, name: 'span' }
       })
     })
   }
