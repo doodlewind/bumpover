@@ -1,6 +1,6 @@
 {
   "name": "bumpover",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "🚧 Controllable toolkit bumping data structure.",
   "main": "lib/index.js",
   "scripts": {
