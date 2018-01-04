@@ -17,9 +17,7 @@ test('empty node', t => {
 
   const bumper = new Bumpover(rules)
 
-  return bumper
-    .bump(input)
-    .then(actual => t.deepEqual(actual, expected))
+  return bumper.bump(input).then(actual => t.deepEqual(actual, expected))
 })
 
 test('undefined node', t => {
@@ -38,7 +36,5 @@ test('undefined node', t => {
 
   const bumper = new Bumpover(rules)
 
-  return bumper
-    .bump(input)
-    .then(actual => t.deepEqual(actual, expected))
+  return bumper.bump(input).then(actual => t.deepEqual(actual, expected))
 })

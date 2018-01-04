@@ -10,9 +10,7 @@ test('empty rule', t => {
 
   const bumper = new Bumpover(rules)
 
-  return bumper
-    .bump(input)
-    .then(actual => t.deepEqual(actual, expected))
+  return bumper.bump(input).then(actual => t.deepEqual(actual, expected))
 })
 
 test('undefined rule', async t => {
@@ -73,7 +71,66 @@ test('nested input, single rule', t => {
 
   const bumper = new Bumpover(rules)
 
-  return bumper
-    .bump(input)
-    .then(actual => t.deepEqual(actual, expected))
+  return bumper.bump(input).then(actual => t.deepEqual(actual, expected))
+})
+
+test('nested input, multi rules', t => {
+  const input = {
+    name: 'div',
+    props: {},
+    children: [
+      {
+        name: 'span',
+        props: {},
+        children: [
+          { name: 'span', props: {}, children: [] },
+          { name: 'small', props: {}, children: [] },
+          { name: 'span', props: {}, children: [] }
+        ]
+      }
+    ]
+  }
+
+  const expected = {
+    name: 'div',
+    props: { background: 'red' },
+    children: [
+      {
+        name: 'span',
+        props: {},
+        children: [
+          { name: 'span', props: {}, children: [] },
+          {
+            name: 'small',
+            props: { fontSize: '16px' },
+            children: []
+          },
+          { name: 'span', props: {}, children: [] }
+        ]
+      }
+    ]
+  }
+
+  const rules = [
+    {
+      match: ({ name }) => name === 'div',
+      update: (node) => new Promise((resolve, reject) => {
+        resolve({
+          node: { ...node, props: { background: 'red' } }
+        })
+      })
+    },
+    {
+      match: ({ name }) => name === 'small',
+      update: (node) => new Promise((resolve, reject) => {
+        resolve({
+          node: { ...node, props: { fontSize: '16px' } }
+        })
+      })
+    }
+  ]
+
+  const bumper = new Bumpover(rules)
+
+  return bumper.bump(input).then(actual => t.deepEqual(actual, expected))
 })
