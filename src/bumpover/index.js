@@ -4,8 +4,8 @@ import { Options } from '../options'
 
 // Result items can be array, object or null.
 // Flatten results to array of objects.
-function sanitizeResults (mayResults) {
-  const results = mayResults
+function sanitizeResults (maybeResults) {
+  const results = maybeResults
     .map(result => Array.isArray(result) ? result : [result])
     .reduce((a, b) => [...a, ...b], [])
     .filter(result => !!result)
