@@ -13,7 +13,7 @@
     "example:xml": "yarn run example examples/xml",
     "lint": "standard",
     "release": "np",
-    "test": "nyc ava",
+    "test": "nyc ava && nyc report --reporter=text-lcov | coveralls",
     "watch": "rollup --config ./build/rollup-cjs.js --watch"
   },
   "repository": {
@@ -48,6 +48,7 @@
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
+    "coveralls": "^3.0.0",
     "np": "^2.18.3",
     "nyc": "^11.4.1",
     "rollup": "^0.53.2",

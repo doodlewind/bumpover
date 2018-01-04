@@ -20,6 +20,9 @@
   <a href="https://travis-ci.org/doodlewind/bumpover">
     <img src="https://travis-ci.org/doodlewind/bumpover.svg?branch=master">
   </a>
+  <a href="https://coveralls.io/github/doodlewind/bumpover?branch=master">
+    <img src="https://img.shields.io/coveralls/doodlewind/bumpover/master.svg?style=flat">
+  </a>
   <a href="./package.json">
     <img src="https://img.shields.io/npm/v/bumpover.svg?maxAge=300&label=version&colorB=007ec6&maxAge=300">
   </a>
