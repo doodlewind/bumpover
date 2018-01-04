@@ -13,8 +13,8 @@
     "example:xml": "yarn run example examples/xml",
     "lint": "standard",
     "release": "np",
-    "test": "ava",
-    "watch": "rollup --config ./build/rollup.js --watch"
+    "test": "nyc ava",
+    "watch": "rollup --config ./build/rollup-cjs.js --watch"
   },
   "repository": {
     "type": "git",
@@ -49,6 +49,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
     "np": "^2.18.3",
+    "nyc": "^11.4.1",
     "rollup": "^0.53.2",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
