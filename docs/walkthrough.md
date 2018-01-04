@@ -185,7 +185,7 @@ So what if you have your own data or markup format? As long as you have its pars
 import { Bumpover } from 'bumpover'
 
 export class JSONBumpover extends Bumpover {
-  constructor (rules = [], options = []) {
+  constructor (rules, options) {
     super(rules, options)
     this.options = {
       ...this.options,
