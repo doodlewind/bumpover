@@ -6,7 +6,7 @@ export class XMLBumpover extends Bumpover {
     super(rules, options)
     this.options = {
       ...this.options,
-      childrenKey: 'elements',
+      childKey: 'elements',
       serializer: convert.js2xml,
       deserializer: convert.xml2js
     }

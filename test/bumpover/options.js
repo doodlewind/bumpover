@@ -264,3 +264,53 @@ test('default value with void serializer result', t => {
 
   return bumper.bump(input).then(actual => t.deepEqual(actual, expected))
 })
+
+test('invalid child key', t => {
+  const input = {
+    name: 'div',
+    props: {},
+    children: [
+      {
+        name: 'span',
+        props: {},
+        children: [
+          { name: 'span', props: {}, children: [] },
+          { name: 'small', props: {}, children: [] },
+          { name: 'span', props: {}, children: [] }
+        ]
+      }
+    ]
+  }
+
+  const expected = {
+    name: 'div',
+    props: {},
+    foo: [],
+    children: [
+      {
+        name: 'span',
+        props: {},
+        children: [
+          { name: 'span', props: {}, children: [] },
+          { name: 'small', props: {}, children: [] },
+          { name: 'span', props: {}, children: [] }
+        ]
+      }
+    ]
+  }
+
+  const rules = [
+    {
+      match: (node) => true,
+      update: (node) => new Promise((resolve, reject) => {
+        resolve({ node })
+      })
+    }
+  ]
+
+  const options = { childKey: 'foo' }
+
+  const bumper = new Bumpover(rules, options)
+
+  return bumper.bump(input).then(actual => t.deepEqual(actual, expected))
+})
