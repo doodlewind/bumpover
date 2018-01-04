@@ -265,7 +265,7 @@ test('default value with void serializer result', t => {
   return bumper.bump(input).then(actual => t.deepEqual(actual, expected))
 })
 
-test('invalid child key', t => {
+test('invalid child key on root', t => {
   const input = {
     name: 'div',
     props: {},

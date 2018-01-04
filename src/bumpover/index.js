@@ -47,7 +47,7 @@ function bumpChildren (node, rules, options, bumpFn, resolve, reject) {
     return
   }
 
-  const children = node[childKey] || []
+  const children = node[childKey]
   const childPromises = children.map(bumpFn)
   const bumpAll = Promise.all(childPromises)
   bumpAll.then(results => {
@@ -63,7 +63,7 @@ function bumpIgnoredNode (node, rule, options, bumpFn, resolve, reject) {
     return
   }
   // Resolve array of results.
-  const children = node[childKey] || []
+  const children = node[childKey]
   const childPromises = children.map(bumpFn)
   const bumpAll = Promise.all(childPromises)
   bumpAll.then(results => {
