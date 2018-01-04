@@ -70,11 +70,11 @@ function bumpIgnoredNode (node, rule, options, bumpFn, resolve, reject) {
 }
 
 function bumpRoot (node, options, bumpFn, resolve, reject) {
+  const { childrenKey, serializer, defaultValue } = options
   if (!node) {
-    resolve(options.defaultValue)
+    resolve(defaultValue)
     return
   }
-  const { childrenKey, serializer, defaultValue } = options
   const childPromises = node[childrenKey].map(bumpFn)
   const bumpChildren = Promise.all(childPromises)
   bumpChildren.then(results => {
@@ -145,17 +145,19 @@ export class Bumpover {
       reject(new Error(`Invalid options:\n${e}`))
     }
 
+    const { defaultValue, deserializer, ignoreUnknown } = options
     // Update root node with rules.
-    const rootNode = this.options.deserializer(input)
+    const rootNode = deserializer(input)
     if (!rootNode) {
-      resolve(options.defaultValue)
+      resolve(defaultValue)
       return
     }
 
     const rule = getRule(rootNode, rules)
-    // Root node shouldn't be ignored.
+    // Resolve default value if root node is unknown.
     if (!rule) {
-      bumpRoot(rootNode, options, bumpNode, resolve, reject)
+      if (ignoreUnknown) resolve(defaultValue)
+      else bumpRoot(rootNode, options, bumpNode, resolve, reject)
     } else {
       rule.update(rootNode).then(result => {
         const { childrenKey, serializer, defaultValue } = options
