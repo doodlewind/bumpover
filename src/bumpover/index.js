@@ -97,9 +97,10 @@ export class Bumpover {
   }
 
   // Bump node into result wrapped in promise.
+  // Resolves new node.
   bumpNode = (node) => new Promise((resolve, reject) => {
     if (!node) {
-      resolve({ action: 'stop', node: null })
+      resolve(null)
       return
     }
     const { rules, options, bumpNode } = this
@@ -125,7 +126,7 @@ export class Bumpover {
       if (action === 'next') {
         bumpChildren(newNode, rules, options, bumpNode, resolve, reject)
       } else if (action === 'stop') {
-        resolve({ action, node: newNode })
+        resolve(newNode)
       } else reject(new Error(`Unknown action:\n${action}`))
     }).catch(reject)
   })
