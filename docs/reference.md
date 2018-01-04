@@ -52,12 +52,12 @@ Each rule should provide its `match` and `update` props, with an optional `struc
 
 Decide if a rule should be applied to current node. For each node, only the **first** rule matching it can be applied. So it makes sense putting the "universal" rules back in the rules array as fallback.
 
-### `update`
+#### `update`
 `(node: Node) => Promise<{ node: NewNode, action?: 'next'|'stop' }>`
 
 Update the selected node into new shape inside promise, resolve your new node in the `node` field, with an optional `action` specifying whether continue traversing children of current node. If not, children of current node will be preserved by default.
 
-### `struct`
+#### `struct`
 `Function`
 
 Optional [struct](https://github.com/ianstormtaylor/superstruct/blob/master/docs/reference.md#struct) validating `NewNode`.
@@ -76,21 +76,21 @@ const Options = struct({
 
 Following options are supported for bumping data.
 
-### `defaultValue`
+#### `defaultValue`
 Default value when `bumper.bump` resolves void data, `null` by default.
 
-### `ignoreUnknown`
+#### `ignoreUnknown`
 Decide if current node should be ignored when no rule is matched, `false` by default.
 
-### `childKey`
+#### `childKey`
 Key string referencing children of a node. `'children'` by default.
 
 > Providing wrong `childKey` may result in weird data shape.
 
-### `serializer`
+#### `serializer`
 Function serializing JSON data into your data structure. `(a) => a` by default.
 
-### `deserializer`
+#### `deserializer`
 Function parsing your data structure into JSON. `(a) => a` by default.
 
 
