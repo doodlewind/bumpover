@@ -1,6 +1,6 @@
 import { struct } from 'superstruct'
 
-export const Rule = struct({
+const Rule = struct({
   match: 'function',
   update: 'function',
   struct: 'function?'

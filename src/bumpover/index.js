@@ -1,5 +1,5 @@
 import { deepEqual } from 'assert'
-import { Rules, getRule } from '../rule'
+import { Rules, getRule } from '../rules'
 import { Options } from '../options'
 
 // Result items can be array, object or null.
