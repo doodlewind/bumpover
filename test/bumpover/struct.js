@@ -1,27 +1,42 @@
 import test from 'ava'
 import { Bumpover } from '../../lib'
-
-test('empty rule', t => {
-  const input = { children: [] }
-
-  const expected = { children: [] }
-
-  const rules = []
-
-  const bumper = new Bumpover(rules)
-
-  return bumper.bump(input).then(actual => t.deepEqual(actual, expected))
-})
+import { struct } from 'superstruct'
 
 test('undefined rule', async t => {
   const input = { children: [] }
-
   const bumper = new Bumpover()
-
   await t.notThrows(bumper.bump(input))
 })
 
-test('nested input, single rule', t => {
+test('invalid struct', async t => {
+  const input = {
+    id: 1,
+    children: [
+      { id: 2, children: [] }
+    ]
+  }
+
+  const InvalidNode = struct({
+    id: 'string',
+    children: 'array'
+  })
+
+  const rules = [
+    {
+      match: (node) => true,
+      update: (node) => new Promise((resolve, reject) => {
+        resolve({ node })
+      }),
+      struct: InvalidNode
+    }
+  ]
+
+  const bumper = new Bumpover(rules)
+
+  await t.throws(bumper.bump(input))
+})
+
+test('single rule struct', t => {
   const input = {
     id: 1,
     children: [
@@ -60,6 +75,11 @@ test('nested input, single rule', t => {
     ]
   }
 
+  const Node = struct({
+    id: 'number',
+    children: 'array'
+  })
+
   const rules = [
     {
       match: (node) => true,
@@ -67,7 +87,8 @@ test('nested input, single rule', t => {
         resolve({
           node: { ...node, id: node.id + 1 }
         })
-      })
+      }),
+      struct: Node
     }
   ]
 
@@ -76,7 +97,7 @@ test('nested input, single rule', t => {
   return bumper.bump(input).then(actual => t.deepEqual(actual, expected))
 })
 
-test('nested input, multi rules', t => {
+test('multi rule structs', t => {
   const input = {
     name: 'div',
     props: {},
@@ -113,6 +134,23 @@ test('nested input, multi rules', t => {
     ]
   }
 
+  const NewProps = struct({
+    fontSize: 'string?',
+    background: 'string?'
+  })
+
+  const DivTag = struct({
+    name: struct.enum(['div']),
+    props: NewProps,
+    children: 'array'
+  })
+
+  const SmallTag = struct({
+    name: struct.enum(['small']),
+    props: NewProps,
+    children: 'array'
+  })
+
   const rules = [
     {
       match: ({ name }) => name === 'div',
@@ -120,7 +158,8 @@ test('nested input, multi rules', t => {
         resolve({
           node: { ...node, props: { background: 'red' } }
         })
-      })
+      }),
+      struct: DivTag
     },
     {
       match: ({ name }) => name === 'small',
@@ -128,7 +167,8 @@ test('nested input, multi rules', t => {
         resolve({
           node: { ...node, props: { fontSize: '16px' } }
         })
-      })
+      }),
+      struct: SmallTag
     }
   ]
 
