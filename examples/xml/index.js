@@ -1,5 +1,4 @@
 import { XMLBumpover } from '../../src'
-import { match, trace, trim } from '../utils'
 
 const rules = [
   {
@@ -12,17 +11,11 @@ const rules = [
   }
 ]
 
-const input = trim(`
+const input = `
 <div>
   <div>demo</div>
 </div>
-`)
-
-const expected = trim(`
-<span>
-  <span>demo</span>
-</span>
-`)
+`
 
 const bumper = new XMLBumpover(rules)
-bumper.bump(input).then(match(expected)).catch(trace)
+bumper.bump(input).then(console.log)

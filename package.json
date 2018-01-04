@@ -11,8 +11,6 @@
     "build:umd-min": "rollup --config ./build/rollup-umd-min.js --silent",
     "clean": "rm -rf ./lib ./node_modules",
     "example": "babel-node --presets env,stage-0",
-    "example:basic": "yarn run example examples/basic",
-    "example:xml": "yarn run example examples/xml",
     "lint": "standard",
     "release": "np",
     "test": "yarn run build:cjs && nyc ava && nyc report --reporter=text-lcov | coveralls",

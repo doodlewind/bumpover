@@ -1,6 +1,5 @@
 import { struct } from 'superstruct'
 import { Bumpover } from '../../src'
-import { match, trace } from '../utils'
 
 const Node = struct({
   tag: struct.enum(['span', 'div']),
@@ -26,12 +25,5 @@ const input = {
   ]
 }
 
-const expected = {
-  tag: 'span',
-  children: [
-    { tag: 'span', children: [] }
-  ]
-}
-
 const bumper = new Bumpover(rules)
-bumper.bump(input).then(match(expected)).catch(trace)
+bumper.bump(input).then(console.log)
