@@ -5,6 +5,20 @@ This document maintains a list of changes to the `bumpover` package with each ne
 ---
 
 
+### `0.4.0` - January 4, 2018
+
+###### NEW
+- **Actions now have `'next'` value by default.** This simplifies resolving API in promise, splitting the `action` boilerplate out.
+
+- **Support UMD build.** This enables quick prototyping via `<script>` tag inside browser, .e.g., JSFiddle. For now `XMLBumpover` and `bumper.assert` are not supported with UMD version. As a workaround, you can [extend your own bumpover class](./docs/walkthrough.md#bumping-custom-data-format) parsing XML with UMD build.
+
+###### BREAKING
+- **`options.childrenKey` is renamed as `options.childKey`.** This is more consistent with the `childNodes` API in DOM.
+
+
+---
+
+
 ### `0.3.0` - January 2, 2018
 
 ###### NEW
