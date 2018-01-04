@@ -4,12 +4,12 @@ import { Options } from '../options'
 
 // Result items can be array, object or null.
 // Flatten results to array of objects.
-function sanitizeResults (results) {
-  const sanitizedResults = results
+function sanitizeResults (mayResults) {
+  const results = mayResults
     .map(result => Array.isArray(result) ? result : [result])
     .reduce((a, b) => [...a, ...b], [])
     .filter(result => !!result)
-  return sanitizedResults
+  return results
 }
 
 // Validate node with possible struct provided in rules.
@@ -78,7 +78,10 @@ function bumpRoot (node, options, bumpFn, resolve, reject) {
   const childPromises = node[childrenKey].map(bumpFn)
   const bumpChildren = Promise.all(childPromises)
   bumpChildren.then(results => {
-    const output = serializer({ ...node, [childrenKey]: results })
+    const output = serializer({
+      ...node,
+      [childrenKey]: sanitizeResults(results)
+    })
     resolve(output || defaultValue)
   }).catch(reject)
 }
@@ -109,7 +112,7 @@ export class Bumpover {
     if (!rule) {
       const { ignoreUnknown } = options
       if (ignoreUnknown) {
-        bumpIgnoredNode(node, rule, options, resolve, reject)
+        bumpIgnoredNode(node, rule, options, bumpNode, resolve, reject)
         return
       } else {
         // Keep current node shape and bump its children.
