@@ -6,9 +6,10 @@ cache:
   yarn: true
 
 env:
-  # TODO: Do two runs, one for testing and one for linting.
+  # Do two runs, one for testing and one for linting.
   matrix:
     - TEST_TYPE=lint
+    - TEST_TYPE=test
 
 script:
   # Run testing or linting depending on the environment.
