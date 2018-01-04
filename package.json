@@ -4,9 +4,11 @@
   "description": "🚧 Controllable toolkit bumping data structure.",
   "main": "lib/index.js",
   "scripts": {
-    "build": "yarn run build:es && yarn run build:cjs",
+    "build": "yarn run build:es & yarn run build:cjs & yarn run build:umd & yarn run build:umd-min",
     "build:es": "rollup --config ./build/rollup.js",
     "build:cjs": "rollup --config ./build/rollup-cjs.js",
+    "build:umd": "rollup --config ./build/rollup-umd.js --silent",
+    "build:umd-min": "rollup --config ./build/rollup-umd-min.js --silent",
     "clean": "rm -rf ./lib ./node_modules",
     "example": "babel-node --presets env,stage-0",
     "example:basic": "yarn run example examples/basic",
@@ -55,8 +57,10 @@
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify": "^2.0.1",
     "standard": "^10.0.3",
     "superstruct": "^0.5.0",
+    "uglify-es": "^3.3.4",
     "xml-js": "^1.6.1"
   },
   "peerDependencies": {
