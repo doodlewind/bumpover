@@ -285,7 +285,6 @@ test('invalid child key on root', t => {
   const expected = {
     name: 'div',
     props: {},
-    foo: [],
     children: [
       {
         name: 'span',
