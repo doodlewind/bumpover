@@ -43,7 +43,7 @@ This document maintains a list of changes to the `bumpover` package with each ne
 ###### BREAKING
 - **Bumpover is exported as ES Module.** This avoids the conflict importing with the confusing `.default` keyword.
 
-- **`bumper.bump` recieves raw content instead of structured node.** This enables users customizing serializer and deserializer for their own data format.
+- **`bumper.bump` receives raw content instead of structured node.** This enables users customizing serializer and deserializer for their own data format.
 
 
 ---

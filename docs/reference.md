@@ -29,7 +29,7 @@ import {
 ```
 
 ## `Bumpover`
-`Bumpover(rules: Array, options: Object) => bumper`
+`new Bumpover(rules: Array, options: Object) => bumper`
 
 The `Bumpover` class receives `rules` validating and converting data, and optional `options` to customize bumping behaviors.
 
@@ -48,7 +48,7 @@ const Rules = struct([Rule])
 Each rule should provide its `match` and `update` props, with an optional `struct`.
 
 #### `match`
-`(node: Node) => boolean`
+`(node: Node) => shouldUpdate: boolean`
 
 Decide if a rule should be applied to current node. For each node, only the **first** rule matching it can be applied. So it makes sense putting the "universal" rules back in the rules array as fallback.
 
