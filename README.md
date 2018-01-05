@@ -142,7 +142,7 @@ Simply providing rules converting nodes, then bumpover will walk and transform d
 
 ## Examples
 
-More examples can be found in the [walkthrough](./docs/walkthrough.md) guide.
+Try out the [live demo on JSFiddle](https://jsfiddle.net/oqpar65u/2/) to get an idea for how the API works, or to quickly verify your use case. More examples can be found in the [walkthrough](./docs/walkthrough.md) guide.
 
 - [Bumping With Struct Validation](./docs/walkthrough.md#bumping-with-struct-validation)
 - [Bumping XML String](./docs/walkthrough.md#bumping-xml-string)
