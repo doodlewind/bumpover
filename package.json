@@ -1,6 +1,6 @@
 {
   "name": "bumpover",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "🚧 Controllable toolkit bumping data structure.",
   "main": "lib/index.js",
   "scripts": {
@@ -41,8 +41,8 @@
     ]
   },
   "dependencies": {
-    "xml-js": "^1.6.1",
-    "superstruct": "^0.5.0"
+    "superstruct": "^0.5.0",
+    "xml-js": "^1.6.1"
   },
   "devDependencies": {
     "ava": "^0.24.0",
