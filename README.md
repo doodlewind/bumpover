@@ -23,6 +23,9 @@
   <a href="https://coveralls.io/github/doodlewind/bumpover?branch=master">
     <img src="https://img.shields.io/coveralls/doodlewind/bumpover/master.svg?style=flat">
   </a>
+  <a href="https://unpkg.com/bumpover/lib/bumpover.min.js">
+    <img src="http://img.badgesize.io/https://unpkg.com/bumpover/lib/bumpover.min.js?compression=gzip&amp;label=size&amp;maxAge=300">
+  </a>
   <a href="https://standardjs.com">
     <img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg">
   </a>
@@ -31,6 +34,9 @@
   </a>
   <a href="./LICENSE">
     <img src="https://img.shields.io/npm/l/bumpover.svg?maxAge=300">
+  </a>
+  <a href="https://juejin.im/post/5a4eaf63f265da3e2744f649">
+    <img src="https://badge.juejin.im/entry/5a4ecbf56fb9a01c9405a44d/likes.svg?style=flat">
   </a>
 </p>
 
