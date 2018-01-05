@@ -119,8 +119,6 @@ Test if `input` can be bumped without rejection.
 
 Conform to same API as `Bumpover`, with its `bump` method receives and yields XML string.
 
-> Please install `xml-js` to use `XMLBumpover`.
-
 
 ## `JSONBumpover`
 

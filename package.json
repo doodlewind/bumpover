@@ -40,6 +40,10 @@
       "test/**/*.js"
     ]
   },
+  "dependencies": {
+    "xml-js": "^1.6.1",
+    "superstruct": "^0.5.0"
+  },
   "devDependencies": {
     "ava": "^0.24.0",
     "babel-cli": "^6.26.0",
@@ -57,9 +61,7 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
     "standard": "^10.0.3",
-    "superstruct": "^0.5.0",
-    "uglify-es": "^3.3.4",
-    "xml-js": "^1.6.1"
+    "uglify-es": "^3.3.4"
   },
   "peerDependencies": {
     "superstruct": "^0.5.0"

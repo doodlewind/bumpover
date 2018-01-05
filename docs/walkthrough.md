@@ -130,15 +130,7 @@ This allows easier data validity checking with rules.
 
 ## Bumping XML String
 
-Besides plain JavaScript object, transforming XML string is also trivial for bumpover. To do this we'll add dependency first:
-
-```
-npm install --save xml-js
-```
-
-> `xml-js` is not a peer dependency of bumpover, but it's required when bumping XML.
-
-Then import `XMLBumpover`, which extends `Bumpover` under the hood.
+Besides plain JavaScript object, transforming XML string is also trivial for bumpover. To do this simply import `XMLBumpover`, which extends `Bumpover` under the hood.
 
 ``` js
 import { XMLBumpover } from 'bumpover'
