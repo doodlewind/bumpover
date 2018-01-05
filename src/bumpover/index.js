@@ -42,8 +42,13 @@ function resolveResult (node, result, struct, childKey) {
 function bumpChildren (node, rules, options, bumpFn, resolve, reject) {
   const { childKey } = options
   // Outlet for leaf node.
-  if (!node || !node[childKey]) {
-    resolve({ ...node })
+  if (!node) {
+    resolve(null)
+    return
+  }
+
+  if (!Array.isArray(node[childKey])) {
+    resolve(node)
     return
   }
 
@@ -77,7 +82,13 @@ function bumpRoot (node, options, bumpFn, resolve, reject) {
     resolve(defaultValue)
     return
   }
-  const children = node[childKey] || []
+
+  if (!Array.isArray(node[childKey])) {
+    resolve(node)
+    return
+  }
+
+  const children = node[childKey]
   const childPromises = children.map(bumpFn)
   const bumpChildren = Promise.all(childPromises)
   bumpChildren.then(results => {

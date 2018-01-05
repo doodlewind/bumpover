@@ -59,9 +59,9 @@ test('failed bumper.test', async t => {
 
   const rules = [
     {
-      match: (node) => false,
+      match: (node) => true,
       update: (node) => new Promise((resolve, reject) => {
-        resolve({ node })
+        reject(new Error('failed test'))
       })
     }
   ]
