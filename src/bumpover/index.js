@@ -14,11 +14,8 @@ function sanitizeResults (maybeResults) {
 
 // Validate node with possible struct provided in rules.
 function validateNode (node, struct) {
-  if (!struct) return
-  try { struct(node) } catch (e) {
-    const nodeStr = JSON.stringify(node, null, 2)
-    throw new Error(`Invalid node:\n${e}\nNode:\n${nodeStr}`)
-  }
+  if (!struct) return node
+  try { return struct(node) } catch (e) { throw e }
 }
 
 // Result can be array, object or null. Unify its shape to result struct.
@@ -26,16 +23,18 @@ function resolveResult (node, result, struct, childKey) {
   if (!result) {
     return { action: 'stop', newNode: null }
   } else if (Array.isArray(result)) {
-    validateNode(node, struct)
     return {
       action: 'next',
-      newNode: { ...node, [childKey]: sanitizeResults(result) }
+      newNode: {
+        ...validateNode(node, struct),
+        [childKey]: sanitizeResults(result)
+      }
     }
   } else {
     // Provide default action.
     const { action = 'next', node } = result
-    validateNode(node, struct)
-    return { action, newNode: node }
+    const newNode = validateNode(node, struct)
+    return { action, newNode }
   }
 }
 
@@ -152,12 +151,8 @@ export class Bumpover {
   bump = (input) => new Promise((resolve, reject) => {
     const { options, rules, bumpNode } = this
     // Validate rules and options for once.
-    try { Rules(rules) } catch (e) {
-      reject(new Error(`Invalid rules:\n${e}`))
-    }
-    try { Options(options) } catch (e) {
-      reject(new Error(`Invalid options:\n${e}`))
-    }
+    try { Rules(rules) } catch (e) { reject(e) }
+    try { Options(options) } catch (e) { reject(e) }
 
     const { defaultValue, deserializer, ignoreUnknown } = options
     // Update root node with rules.
