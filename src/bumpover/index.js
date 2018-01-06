@@ -84,7 +84,7 @@ function bumpRoot (node, options, bumpFn, resolve, reject) {
   }
 
   if (!Array.isArray(node[childKey])) {
-    resolve(node)
+    resolve(serializer(node) || defaultValue)
     return
   }
 

@@ -6,7 +6,7 @@ const connect = arr => arr.map(line => line.trim()).join('')
 test('empty data', t => {
   const input = ''
 
-  const expected = {}
+  const expected = null
 
   const rules = [
     {
