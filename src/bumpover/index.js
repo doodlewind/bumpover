@@ -106,6 +106,7 @@ export class Bumpover {
       defaultValue: null,
       ignoreUnknown: false,
       childKey: 'children',
+      onUnmatch: node => {},
       serializer: a => a,
       deserializer: a => a,
       ...options
@@ -123,11 +124,12 @@ export class Bumpover {
     const rule = getRule(node, rules)
     // Keep or discard unknown node according to `ignoreUnknown` option.
     if (!rule) {
-      const { ignoreUnknown } = options
+      const { ignoreUnknown, onUnmatch } = options
       if (ignoreUnknown) {
         bumpIgnoredNode(node, rule, options, bumpNode, resolve, reject)
         return
       } else {
+        onUnmatch(node)
         // Keep current node shape and bump its children.
         bumpChildren(node, rules, options, bumpNode, resolve, reject)
         return
