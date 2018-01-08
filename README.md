@@ -118,10 +118,8 @@ import { Bumpover } from 'bumpover'
 const rules = [
   {
     match: node => node.name === 'div',
-    update: node => new Promise((resolve, reject) => {
-      resolve({
-        node: { ...node, name: 'span' }
-      })
+    update: node => Promise.resolve({
+      node: { ...node, name: 'span' }
     })
   }
 ]

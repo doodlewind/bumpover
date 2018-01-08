@@ -43,9 +43,7 @@ test('successful bumper.test', async t => {
   const rules = [
     {
       match: (node) => true,
-      update: (node) => new Promise((resolve, reject) => {
-        resolve({ node })
-      })
+      update: (node) => Promise.resolve({ node })
     }
   ]
 
@@ -60,9 +58,7 @@ test('failed bumper.test', async t => {
   const rules = [
     {
       match: (node) => true,
-      update: (node) => new Promise((resolve, reject) => {
-        reject(new Error('failed test'))
-      })
+      update: (node) => Promise.reject(new Error('foo'))
     }
   ]
 
