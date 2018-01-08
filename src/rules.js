@@ -3,7 +3,8 @@ import { struct } from 'superstruct'
 const Rule = struct({
   match: 'function',
   update: 'function',
-  struct: 'function?'
+  struct: 'function?',
+  childKey: 'string?'
 })
 
 export const Rules = struct([Rule])

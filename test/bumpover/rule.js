@@ -377,3 +377,67 @@ test('invalid action on node', async t => {
 
   await t.throws(bumper.bump(input))
 })
+
+test('custom child key', async t => {
+  const input = {
+    name: 'div',
+    props: {},
+    children: [
+      {
+        name: 'span',
+        props: {},
+        foo: [
+          { name: 'span', props: {}, children: [] },
+          { name: 'small', props: {}, children: [] },
+          { name: 'span', props: {}, children: [] }
+        ]
+      }
+    ]
+  }
+
+  const expected = {
+    name: 'div',
+    props: {},
+    children: [
+      {
+        name: 'span',
+        props: {
+          fontSize: '16px'
+        },
+        foo: [
+          {
+            name: 'span',
+            props: {
+              fontSize: '16px'
+            },
+            children: []
+          },
+          { name: 'small', props: {}, children: [] },
+          {
+            name: 'span',
+            props: {
+              fontSize: '16px'
+            },
+            children: []
+          }
+        ]
+      }
+    ]
+  }
+
+  const rules = [
+    {
+      match: ({ name }) => name === 'span',
+      update: (node) => new Promise((resolve, reject) => {
+        resolve({
+          node: { ...node, props: { fontSize: '16px' } }
+        })
+      }),
+      childKey: 'foo'
+    }
+  ]
+
+  const bumper = new Bumpover(rules)
+
+  return bumper.bump(input).then(actual => t.deepEqual(actual, expected))
+})

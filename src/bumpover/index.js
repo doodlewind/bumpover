@@ -1,103 +1,15 @@
 import { deepEqual } from 'assert'
 import { Rules, getRule } from '../rules'
 import { Options } from '../options'
-
-// Result items can be array, object or null.
-// Flatten results to array of objects.
-function sanitizeResults (maybeResults) {
-  const results = maybeResults
-    .map(result => Array.isArray(result) ? result : [result])
-    .reduce((a, b) => [...a, ...b], [])
-    .filter(result => !!result)
-  return results
-}
-
-// Validate node with possible struct provided in rules.
-function validateNode (node, struct) {
-  if (!struct) return node
-  try { return struct(node) } catch (e) { throw e }
-}
-
-// Result can be array, object or null. Unify its shape to result struct.
-function resolveResult (node, result, struct, childKey) {
-  if (!result) {
-    return { action: 'stop', newNode: null }
-  } else if (Array.isArray(result)) {
-    return {
-      action: 'next',
-      newNode: {
-        ...validateNode(node, struct),
-        [childKey]: sanitizeResults(result)
-      }
-    }
-  } else {
-    // Provide default action.
-    const { action = 'next', node } = result
-    const newNode = validateNode(node, struct)
-    return { action, newNode }
-  }
-}
-
-function bumpChildren (node, rules, options, bumpFn, resolve, reject) {
-  const { childKey } = options
-  // Outlet for leaf node.
-  if (!node) {
-    resolve(null)
-    return
-  }
-
-  if (!Array.isArray(node[childKey])) {
-    resolve(node)
-    return
-  }
-
-  const children = node[childKey]
-  const childPromises = children.map(bumpFn)
-  const bumpAll = Promise.all(childPromises)
-  bumpAll.then(results => {
-    resolve({ ...node, [childKey]: sanitizeResults(results) })
-  }).catch(reject)
-}
-
-function bumpIgnoredNode (node, rule, options, bumpFn, resolve, reject) {
-  const { childKey } = options
-  // Resolve null if the ignored node is leaf.
-  if (!node || !node[childKey]) {
-    resolve(null)
-    return
-  }
-  // Resolve array of results.
-  const children = node[childKey]
-  const childPromises = children.map(bumpFn)
-  const bumpAll = Promise.all(childPromises)
-  bumpAll.then(results => {
-    resolve(sanitizeResults(results))
-  }).catch(reject)
-}
-
-function bumpRoot (node, options, bumpFn, resolve, reject) {
-  const { childKey, serializer, defaultValue } = options
-  if (!node) {
-    resolve(defaultValue)
-    return
-  }
-
-  if (!Array.isArray(node[childKey])) {
-    resolve(serializer(node) || defaultValue)
-    return
-  }
-
-  const children = node[childKey]
-  const childPromises = children.map(bumpFn)
-  const bumpChildren = Promise.all(childPromises)
-  bumpChildren.then(results => {
-    const output = serializer({
-      ...node,
-      [childKey]: sanitizeResults(results)
-    })
-    resolve(output || defaultValue)
-  }).catch(reject)
-}
+import {
+  bumpChildren,
+  bumpIgnoredNode,
+  bumpRoot
+} from './traverse'
+import {
+  getChildKey,
+  resolveResult
+} from './utils'
 
 export class Bumpover {
   constructor (rules = [], options = {}) {
@@ -126,7 +38,7 @@ export class Bumpover {
     if (!rule) {
       const { ignoreUnknown, onUnmatch } = options
       if (ignoreUnknown) {
-        bumpIgnoredNode(node, rule, options, bumpNode, resolve, reject)
+        bumpIgnoredNode(node, options, bumpNode, resolve, reject)
         return
       } else {
         onUnmatch(node)
@@ -137,7 +49,7 @@ export class Bumpover {
     }
 
     rule.update(node).then(result => {
-      const { childKey } = options
+      const childKey = getChildKey(node, rules, options)
       const { action, newNode } = resolveResult(
         node, result, rule.struct, childKey
       )
@@ -170,16 +82,17 @@ export class Bumpover {
       if (ignoreUnknown) resolve(defaultValue)
       else {
         this.options.onUnmatch(rootNode)
-        bumpRoot(rootNode, options, bumpNode, resolve, reject)
+        bumpRoot(rootNode, [], options, bumpNode, resolve, reject)
       }
     } else {
       rule.update(rootNode).then(result => {
-        const { childKey, serializer, defaultValue } = options
+        const { serializer, defaultValue } = options
+        const childKey = getChildKey(rootNode, rules, options)
         const { action, newNode } = resolveResult(
           rootNode, result, rule.struct, childKey
         )
         if (action === 'next') {
-          bumpRoot(newNode, options, bumpNode, resolve, reject)
+          bumpRoot(newNode, rules, options, bumpNode, resolve, reject)
         } else if (action === 'stop') {
           resolve(serializer(newNode) || defaultValue)
         } else reject(new Error(`Unknown action:\n${action}`))
