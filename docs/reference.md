@@ -5,10 +5,12 @@
     * [`match`](#match)
     * [`update`](#update)
     * [`struct`](#struct)
+    * [`childKey`](#childkey)
   * [`Options`](#options)
     * [`defaultValue`](#defaultvalue)
     * [`ignoreUnknown`](#ignoreunknown)
     * [`childKey`](#childkey)
+    * [`onUnmatch`](#onunmatch)
     * [`serializer`](#serializer)
     * [`deserializer`](#deserializer)
 * [`bumper`](#bumper)
@@ -39,7 +41,8 @@ The `Bumpover` class receives `rules` validating and converting data, and option
 const Rule = struct({
   match: 'function',
   update: 'function',
-  struct: 'function?'
+  struct: 'function?',
+  childKey: 'string?'
 })
 
 const Rules = struct([Rule])
@@ -61,6 +64,11 @@ Update the selected node into new shape inside promise, resolve your new node in
 `Function`
 
 Optional [struct](https://github.com/ianstormtaylor/superstruct/blob/master/docs/reference.md#struct) validating `NewNode`.
+
+#### `childKey`
+`string`
+
+Optional key string referencing children of a node matched by the rule. This will overwrite `options.childKey`.
 
 ### Options
 
