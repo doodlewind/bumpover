@@ -74,10 +74,8 @@ import { Bumpover } from 'bumpover'
 const rules = [
   {
     match: node => node.name === 'div',
-    update: node => new Promise((resolve, reject) => {
-      resolve({
-        node: { ...node, name: 'span' }
-      })
+    update: node => Promise.resolve({
+      node: { ...node, name: 'span' }
     })
   }
 ]
@@ -114,12 +112,13 @@ Putting the `NewNode` into our rules, and bumpover will recursively check each n
 const rules = [
   {
     match: node => 'name' in node,
-    update: node => new Promise((resolve, reject) => {
-      const { name, props, children } = node
-      resolve({
-        node: { tag: name, props, children }
-      })
-    })
+    update: node => Promise.resolve({
+      node: {
+        tag: node.name,
+        props: node.props,
+        children: node.children
+      }
+    }),
     struct: NewNode
   }
 ]
@@ -142,10 +141,8 @@ Now what if we'd still like to transform all `<div>` tags with `<span>`? Providi
 const rules = [
   {
     match: node => node.name === 'div',
-    update: node => new Promise((resolve, reject) => {
-      resolve({
-        node: { ...node, name: 'span' }
-      })
+    update: node => Promise.resolve({
+      node: { ...node, name: 'span' }
     })
   }
 ]
@@ -198,7 +195,7 @@ Most of data validator is implemented in a synchronized way. This is generally t
 Say you're transforming data of a legacy rich content editor, whose XML string has inlined external resources like `<img src="//example.com/demo.jpg">`. Migrating such `<img>` node requires fetching legacy image data, uploading it to your cloud storage, and filling new image node's `src` on upload ends. Since `rule.update` returns `Promise` instead node data, we can easily handle this case:
 
 ``` js
-async function imageOps (node, resolve) {
+async function imageOps (node, resolve, reject) {
   const image = await fetch(node.src)
   const newSrc = await uploadImage(image)
   resolve({
@@ -236,8 +233,8 @@ The `<video>` tag is filled with unfamiliar content. During data migration, you 
 const rules = [
   {
     match: node => node.name === 'video',
-    update: node => new Promise((resolve, reject) => {
-      resolve({ action: 'stop', node })
+    update: node => Promise.resolve({
+      action: 'stop', node
     })
   }
 ]
