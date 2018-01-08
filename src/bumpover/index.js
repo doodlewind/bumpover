@@ -168,7 +168,10 @@ export class Bumpover {
     // Resolve default value if root node is unknown.
     if (!rule) {
       if (ignoreUnknown) resolve(defaultValue)
-      else bumpRoot(rootNode, options, bumpNode, resolve, reject)
+      else {
+        this.options.onUnmatch(rootNode)
+        bumpRoot(rootNode, options, bumpNode, resolve, reject)
+      }
     } else {
       rule.update(rootNode).then(result => {
         const { childKey, serializer, defaultValue } = options
