@@ -5,6 +5,20 @@ This document maintains a list of changes to the `bumpover` package with each ne
 ---
 
 
+### `0.5.0` - January 8, 2018
+
+###### NEW
+- **Add `options.onUnmatch` handler.** This handler is called when a node is matched without rules and `ignoredUnknown` is false, which allows more control on unknown nodes.
+
+- **Add `rule.childKey` props.** This allows custom child key for different types of nodes.
+
+###### BREAKING
+- **When struct validation fails, `StructError` is thrown instead of plain error.** This should not affect custom rules for now. Unifying errors thrown by superstruct allows for more accruate operations on specific errors.
+
+
+---
+
+
 ### `0.4.0` - January 4, 2018
 
 ###### NEW
