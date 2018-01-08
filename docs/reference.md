@@ -69,6 +69,7 @@ const Options = struct({
   defaultValue: 'any',
   ignoreUnknown: 'boolean',
   childKey: 'string',
+  onUnmatch: 'function',
   serializer: 'function',
   deserializer: 'function'
 })
@@ -84,6 +85,9 @@ Decide if current node should be ignored when no rule is matched, `false` by def
 
 #### `childKey`
 Key string referencing children of a node. `'children'` by default.
+
+#### `onUnmatch`
+Called when no rule is found for current node and `ignoreKnown === false`. This handler does not affect subsequent traversing. `(node) => {}` by default.
 
 > Providing wrong `childKey` may result in weird data shape.
 
