@@ -18,6 +18,7 @@ export class Bumpover {
       defaultValue: null,
       ignoreUnknown: false,
       childKey: 'children',
+      beforeMatch: node => {},
       onUnmatch: node => {},
       serializer: a => a,
       deserializer: a => a,
@@ -33,10 +34,11 @@ export class Bumpover {
       return
     }
     const { rules, options, bumpNode } = this
+    const { ignoreUnknown, onUnmatch, beforeMatch } = options
+    beforeMatch(node)
     const rule = getRule(node, rules)
     // Keep or discard unknown node according to `ignoreUnknown` option.
     if (!rule) {
-      const { ignoreUnknown, onUnmatch } = options
       if (ignoreUnknown) {
         bumpIgnoredNode(node, options, bumpNode, resolve, reject)
         return
@@ -68,20 +70,22 @@ export class Bumpover {
     try { Rules(rules) } catch (e) { reject(e) }
     try { Options(options) } catch (e) { reject(e) }
 
-    const { defaultValue, deserializer, ignoreUnknown } = options
+    const {
+      defaultValue, deserializer, ignoreUnknown, beforeMatch, onUnmatch
+    } = options
     // Update root node with rules.
     const rootNode = deserializer(input)
     if (!rootNode) {
       resolve(defaultValue)
       return
     }
-
+    beforeMatch(rootNode)
     const rule = getRule(rootNode, rules)
     // Resolve default value if root node is unknown.
     if (!rule) {
       if (ignoreUnknown) resolve(defaultValue)
       else {
-        this.options.onUnmatch(rootNode)
+        onUnmatch(rootNode)
         bumpRoot(rootNode, [], options, bumpNode, resolve, reject)
       }
     } else {

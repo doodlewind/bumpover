@@ -10,6 +10,7 @@
     * [`defaultValue`](#defaultvalue)
     * [`ignoreUnknown`](#ignoreunknown)
     * [`childKey`](#childkey)
+    * [`beforeMatch`](#beforematch)
     * [`onUnmatch`](#onunmatch)
     * [`serializer`](#serializer)
     * [`deserializer`](#deserializer)
@@ -77,6 +78,7 @@ const Options = struct({
   defaultValue: 'any',
   ignoreUnknown: 'boolean',
   childKey: 'string',
+  beforeMatch: 'function',
   onUnmatch: 'function',
   serializer: 'function',
   deserializer: 'function'
@@ -93,6 +95,9 @@ Decide if current node should be ignored when no rule is matched, `false` by def
 
 #### `childKey`
 Key string referencing children of a node. `'children'` by default.
+
+#### `beforeMatch`
+Called before matching rules for current node. This handler does not affect subsequent traversing. `(node) => {}` by default.
 
 #### `onUnmatch`
 Called when no rule is found for current node and `ignoreKnown === false`. This handler does not affect subsequent traversing. `(node) => {}` by default.
