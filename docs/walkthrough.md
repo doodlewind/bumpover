@@ -198,9 +198,9 @@ Say you're transforming data of a legacy rich content editor, whose XML string h
 async function imageOps (node, resolve, reject) {
   const image = await fetch(node.src)
   const newSrc = await uploadImage(image)
-  resolve({
-    node: { ...node, src: newSrc }
-  })
+  try {
+    resolve({ node: { ...node, src: newSrc } })
+  } catch (e) { reject(e) }
 }
 
 const rules = [
