@@ -5,6 +5,15 @@ This document maintains a list of changes to the `bumpover` package with each ne
 ---
 
 
+### `0.6.0` - January 10, 2018
+
+###### NEW
+- **Add `options.beforeMatch` handler.** This handler is called before matching a node, which allows more analysis on nodes stat.
+
+
+---
+
+
 ### `0.5.0` - January 8, 2018
 
 ###### NEW
