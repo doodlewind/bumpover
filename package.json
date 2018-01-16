@@ -1,7 +1,7 @@
 {
   "name": "bumpover",
   "version": "0.6.0",
-  "description": "🚧 Controllable toolkit bumping data structure.",
+  "description": "🚧 Async data transforming with simple rules.",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn run build:es & yarn run build:cjs & yarn run build:umd & yarn run build:umd-min",

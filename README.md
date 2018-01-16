@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  Controllable toolkit bumping data structure.
+  Async data transforming with simple rules.
 </p>
 
 <br/>
